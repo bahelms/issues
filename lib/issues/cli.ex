@@ -6,8 +6,14 @@ defmodule Issues.CLI do
   that end up generating a table of the last _n_ issues in a github project
   """
 
+  @doc """
+  Can run a function with mix: 
+  mix run -e 'Issues.CLI.run(["-h"])'
+  """
   def run(argv) do
-    parse_args(argv)
+    argv
+      |> parse_args
+      |> process
   end
 
   @doc """
@@ -27,4 +33,16 @@ defmodule Issues.CLI do
       _                                -> :help
     end
   end
+
+  def process(:help) do
+    IO.puts """
+    usage: issues <user> <project> [ count | #{@default_count} ]
+    """
+    System.halt(0)
+  end
+
+  def process({ user, project, _count }) do
+    GithubIssues.fetch(user, project)
+  end
 end
+
