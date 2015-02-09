@@ -1,4 +1,6 @@
 defmodule Issues.CLI do
+  import Issues.TableFormatter, only: [display_table: 2]
+
   @default_count 4
 
   @moduledoc """
@@ -38,11 +40,12 @@ defmodule Issues.CLI do
   end
 
   def process({ user, project, count }) do
-    GithubIssues.fetch(user, project) 
+    Issues.GithubIssues.fetch(user, project) 
       |> decode_response
       |> convert_to_list_of_hash_dicts
       |> sort_ascending
       |> Enum.take(count)
+      |> display_table(["number", "created_at", "title"])
   end
 
   def decode_response({ :ok, body }), do: body
@@ -53,7 +56,7 @@ defmodule Issues.CLI do
   end
 
   def convert_to_list_of_hash_dicts(issues) do
-    Enum.into(issues, HashDict.new)
+    Enum.map(issues, &Enum.into(&1, HashDict.new))
   end
 
   def sort_ascending(issues) do

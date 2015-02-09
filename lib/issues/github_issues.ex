@@ -1,4 +1,4 @@
-defmodule GithubIssues do
+defmodule Issues.GithubIssues do
   @github_url Application.get_env(:issues, :github_url)
 
   def fetch(user, project) do

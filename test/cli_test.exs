@@ -24,7 +24,8 @@ defmodule CLITest do
   end
 
   defp fake_list(values) do
-    for value <- values, do: [{ "created_at", value }, { "other_data", "xxx" }]
-      |> convert_to_list_of_hash_dicts
+    data = for value <- values, 
+      do: [{ "created_at", value }, { "other_data", "xxx" }]
+    convert_to_list_of_hash_dicts(data)
   end
 end
