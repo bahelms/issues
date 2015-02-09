@@ -11,9 +11,7 @@ defmodule Issues.CLI do
   mix run -e 'Issues.CLI.run(["-h"])'
   """
   def run(argv) do
-    argv
-      |> parse_args
-      |> process
+    argv |> parse_args |> process
   end
 
   @doc """
@@ -35,14 +33,31 @@ defmodule Issues.CLI do
   end
 
   def process(:help) do
-    IO.puts """
-    usage: issues <user> <project> [ count | #{@default_count} ]
-    """
+    IO.puts "usage: issues <user> <project> [ count | #{@default_count} ]"
     System.halt(0)
   end
 
-  def process({ user, project, _count }) do
-    GithubIssues.fetch(user, project)
+  def process({ user, project, count }) do
+    GithubIssues.fetch(user, project) 
+      |> decode_response
+      |> convert_to_list_of_hash_dicts
+      |> sort_ascending
+      |> Enum.take(count)
+  end
+
+  def decode_response({ :ok, body }), do: body
+  def decode_response({ :error, body }) do
+    { _, message } = List.keyfind(body, "message", 0)
+    IO.puts "Error fetching from GitHub: #{message}"
+    System.halt(2)
+  end
+
+  def convert_to_list_of_hash_dicts(issues) do
+    Enum.into(issues, HashDict.new)
+  end
+
+  def sort_ascending(issues) do
+    Enum.sort(issues, fn a, b -> a["created_at"] <= b["created_at"] end)
   end
 end
 
