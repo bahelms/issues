@@ -5,6 +5,9 @@ defmodule Issues.Mixfile do
     [app: :issues,
      version: "0.0.1",
      elixir: "~> 1.0",
+     name: "Issues", #for ex_doc
+     source_url: "https://github.com/bahelms/issues", #for ex_doc
+     escript: escript_config,
      deps: deps]
   end
 
@@ -25,8 +28,14 @@ defmodule Issues.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
+      { :ex_doc,    github: "elixir-lang/ex_doc", only: :dev },
       { :httpoison, "~> 0.6" },
       { :jsx,       "~> 2.4" }
     ]
+  end
+
+  defp escript_config do
+    # Package the program with mix: mix excript.build
+    [main_module: Issues.CLI]
   end
 end

@@ -1,9 +1,12 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
 # Access with Application.get_env(:issues, :github_url)
 config :issues, github_url: "https://api.github.com"
+
+# Set log level at compile time (debug, info, warn, error)
+config :logger, compile_time_purge_level: :info
+# Logger.configure to set at runtime (only compile time level and up)
+
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

@@ -10,3 +10,6 @@ Issues
 4. Sort Data
 5. Take first N items
 6. Format for table display
+
+`mix docs` to generate ex_doc HTML documentation
+@doc comments use markdown to format

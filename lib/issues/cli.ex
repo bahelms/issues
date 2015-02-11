@@ -10,9 +10,10 @@ defmodule Issues.CLI do
 
   @doc """
   Can run a function with mix: 
-  mix run -e 'Issues.CLI.run(["-h"])'
+  mix main -e 'Issues.CLI.run(["-h"])'
   """
-  def run(argv) do
+  def main(argv) do
+    #Escript looks for a main function and passes char lists as command line args
     argv |> parse_args |> process
   end
 
